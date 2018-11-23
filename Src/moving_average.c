@@ -11,6 +11,8 @@
 
 #include "moving_average.h"
 
+#include "circular_queue.h"
+
 MovingAverage *moving_average_allocate(int size)
 {
 	MovingAverage *maverage;
