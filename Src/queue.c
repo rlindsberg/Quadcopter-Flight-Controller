@@ -15,15 +15,13 @@ Queue *queue_allocate(int size)
 	const int sizeof_pointer = sizeof(void*);
 
 	Queue *queue;
-	void* *data;
+	void **data;
 
 	queue = (Queue *)malloc(sizeof(Queue));
 	data = malloc(sizeof_pointer * size);
 
 	queue->Size = size;
 	queue->Data = data;
-	queue->Tail = 0;
-	queue->Head = 0;
 
 	return queue;
 }

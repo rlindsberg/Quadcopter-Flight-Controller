@@ -17,7 +17,7 @@
 /**
 * @brief Initialize a queue to a circular queue configuration.
 * 
-* @param queue	 A pointer to the queue.
+* @param queue A pointer to the queue.
 *
 * @return void
 **/
@@ -40,7 +40,7 @@ bool circular_queue_enqueue(Queue *queue, void *element);
 *
 * @return The dequeued void pointer element.
 **/
-bool circular_queue_dequeue(Queue *queue, void* *destination);
+bool circular_queue_dequeue(Queue *queue, void **destination);
 
 /**
 * @brief Check whether the queue is full.

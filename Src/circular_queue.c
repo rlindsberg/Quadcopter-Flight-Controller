@@ -30,7 +30,7 @@ bool circular_queue_enqueue(Queue *queue, void *element)
 	return true;
 }
 
-bool circular_queue_dequeue(Queue *queue, void* *destination)
+bool circular_queue_dequeue(Queue *queue, void **destination)
 {
 	if (circular_queue_is_empty(queue))
 		return false;

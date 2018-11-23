@@ -25,7 +25,7 @@ typedef struct
 	int Head;
 	int	Tail;
 
-	void* *Data;
+	void **Data;
 } Queue;
 
 /**
