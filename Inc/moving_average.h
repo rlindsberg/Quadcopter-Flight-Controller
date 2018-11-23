@@ -10,6 +10,8 @@
 #ifndef MOVING_AVERAGE_H
 #define MOVING_AVERAGE_H
 
+#include "queue.h"
+
 /**
 * @brief Data type used to represent the average of a moving subset of data points, 
 * continuously shifting forward in time.

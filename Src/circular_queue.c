@@ -14,6 +14,8 @@
 void circular_queue_init(Queue *queue)
 {
 	circular_queue_set_empty(queue);
+
+	queue->Tail = 0;
 }
 
 bool circular_queue_enqueue(Queue *queue, void *element)
