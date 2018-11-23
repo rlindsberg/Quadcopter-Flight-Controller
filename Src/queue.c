@@ -27,3 +27,9 @@ Queue *queue_allocate(int size)
 
 	return queue;
 }
+
+void queue_deallocate(Queue *queue)
+{
+	free(queue->Data);
+	free(queue);
+}

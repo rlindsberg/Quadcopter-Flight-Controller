@@ -25,6 +25,13 @@ MovingAverage *moving_average_allocate(int size)
 	return maverage;
 }
 
+void moving_average_deallocate(MovingAverage *maverage)
+{
+	queue_deallocate(maverage->Data);
+
+	free(maverage);
+}
+
 void moving_average_init(MovingAverage *maverage)
 {
 	int i;

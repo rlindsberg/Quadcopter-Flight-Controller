@@ -38,6 +38,15 @@ typedef struct
 MovingAverage *moving_average_allocate(int size);
 
 /**
+* @brief Deallocate a dynamically allocated moving average.
+*
+* @param maverage A pointer to the moving average.
+*
+* @return void
+**/
+void moving_average_deallocate(MovingAverage *maverage);
+
+/**
 * @brief Initialize a moving average to zero.
 * 
 * @param maverage A pointer to the moving average.

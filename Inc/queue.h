@@ -37,4 +37,13 @@ typedef struct
 **/
 Queue *queue_allocate(int size);
 
+/**
+* @brief Deallocate a dynamically allocated queue.
+*
+* @param queue A pointer to the queue.
+*
+* @return void
+**/
+void queue_deallocate(Queue *queue);
+
 #endif
