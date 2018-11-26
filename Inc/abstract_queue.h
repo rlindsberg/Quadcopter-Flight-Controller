@@ -1,14 +1,14 @@
 /**
 ********************************************************************************
-* @file    queue.h
+* @file    abstract_queue.h
 * @author  Alexander Vassiliou
-* @date    23 November 2018
-* @brief   Header file for queue.c
+* @date    26 November 2018
+* @brief   Header file for abstract_queue.c
 ********************************************************************************
 */
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef ABSTRACT_QUEUE_H
+#define ABSTRACT_QUEUE_H
 
 /**
 * @brief Data type used to represent a queue of elements, using the FIFO policy.
@@ -26,7 +26,7 @@ typedef struct
 	int	Tail;
 
 	void **Data;
-} Queue;
+} AbstractQueue;
 
 /**
 * @brief Dynamically allocate a new queue of a given size.
@@ -35,7 +35,7 @@ typedef struct
 *
 * @return A pointer to the newly allocated queue.
 **/
-Queue *queue_allocate(int size);
+AbstractQueue *abstract_queue_allocate(int size);
 
 /**
 * @brief Deallocate a dynamically allocated queue.
@@ -44,6 +44,6 @@ Queue *queue_allocate(int size);
 *
 * @return void
 **/
-void queue_deallocate(Queue *queue);
+void abstract_queue_deallocate(AbstractQueue *queue);
 
 #endif

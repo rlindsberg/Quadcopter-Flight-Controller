@@ -1,23 +1,25 @@
 /**
 ********************************************************************************
-* @file    queue.c
+* @file    abstract_queue.c
 * @author  Alexander Vassiliou
-* @date    23 November 2018
-* @brief   This file contains an implementation of a general queue type 
+* @date    26 November 2018
+* @brief   This file contains an implementation of a general abstract queue type 
 * with no operations.
 ********************************************************************************
 */
 
-#include "queue.h"
+#include "abstract_queue.h"
 
-Queue *queue_allocate(int size)
+#include "stdlib.h"
+
+AbstractQueue *abstract_queue_allocate(int size)
 {
 	const int sizeof_pointer = sizeof(void*);
 
-	Queue *queue;
+	AbstractQueue *queue;
 	void **data;
 
-	queue = (Queue *)malloc(sizeof(Queue));
+	queue = (AbstractQueue *)malloc(sizeof(AbstractQueue));
 	data = malloc(sizeof_pointer * size);
 
 	queue->Size = size;
@@ -26,7 +28,7 @@ Queue *queue_allocate(int size)
 	return queue;
 }
 
-void queue_deallocate(Queue *queue)
+void abstract_queue_deallocate(AbstractQueue *queue)
 {
 	free(queue->Data);
 	free(queue);

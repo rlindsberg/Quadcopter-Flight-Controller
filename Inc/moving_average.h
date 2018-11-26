@@ -10,7 +10,7 @@
 #ifndef MOVING_AVERAGE_H
 #define MOVING_AVERAGE_H
 
-#include "queue.h"
+#include "abstract_queue.h"
 
 /**
 * @brief Data type used to represent the average of a moving subset of data points, 
@@ -25,7 +25,7 @@ typedef struct
 	void *Sum;
 	void *Average;
 
-	Queue *Data;
+	AbstractQueue *Data;
 } MovingAverage;
 
 /**
@@ -82,6 +82,6 @@ inline float moving_average_get_sum_float(MovingAverage *maverage);
 * 
 * @return A floating point value of the last calculated average.
 **/
-inline float moving_average_get_average_float(MovingAverage *maverage);
+float moving_average_get_average_float(MovingAverage *maverage);
 
 #endif

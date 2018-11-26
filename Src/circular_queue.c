@@ -11,14 +11,14 @@
 
 #include "circular_queue.h"
 
-void circular_queue_init(Queue *queue)
+void circular_queue_init(AbstractQueue *queue)
 {
 	circular_queue_set_empty(queue);
 
 	queue->Tail = 0;
 }
 
-bool circular_queue_enqueue(Queue *queue, void *element)
+bool circular_queue_enqueue(AbstractQueue *queue, void *element)
 {
 	if (circular_queue_is_full(queue))
 		return false;
@@ -32,7 +32,7 @@ bool circular_queue_enqueue(Queue *queue, void *element)
 	return true;
 }
 
-bool circular_queue_dequeue(Queue *queue, void **destination)
+bool circular_queue_dequeue(AbstractQueue *queue, void **destination)
 {
 	if (circular_queue_is_empty(queue))
 		return false;
@@ -46,27 +46,27 @@ bool circular_queue_dequeue(Queue *queue, void **destination)
 	return true;
 }
 
-inline bool circular_queue_is_full(Queue *queue)
+inline bool circular_queue_is_full(AbstractQueue *queue)
 {
 	return queue->Tail == queue->Head;
 }
 
-inline bool circular_queue_is_empty(Queue *queue)
+inline bool circular_queue_is_empty(AbstractQueue *queue)
 {
 	return queue->Head == -1;
 }
 
-inline void circular_queue_set_empty(Queue *queue)
+inline void circular_queue_set_empty(AbstractQueue *queue)
 {
 	queue->Head = -1;
 }
 
-inline void circular_queue_increment_tail(Queue *queue)
+inline void circular_queue_increment_tail(AbstractQueue *queue)
 {
 	queue->Tail = (queue->Tail + 1) % queue->Size;
 }
 
-inline void circular_queue_increment_head(Queue *queue)
+inline void circular_queue_increment_head(AbstractQueue *queue)
 {
 	queue->Head = (queue->Head + 1) % queue->Size;
 }

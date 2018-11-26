@@ -13,12 +13,14 @@
 
 #include "circular_queue.h"
 
+#include "stdlib.h"
+
 MovingAverage *moving_average_allocate(int size)
 {
 	MovingAverage *maverage;
-	Queue *queue;
+	AbstractQueue *queue;
 	
-	queue = queue_allocate(size);
+	queue = abstract_queue_allocate(size);
 	circular_queue_init(queue);
 
 	maverage = (MovingAverage *)malloc(sizeof(MovingAverage));
@@ -29,7 +31,7 @@ MovingAverage *moving_average_allocate(int size)
 
 void moving_average_deallocate(MovingAverage *maverage)
 {
-	queue_deallocate(maverage->Data);
+	abstract_queue_deallocate(maverage->Data);
 
 	free(maverage);
 }
@@ -66,7 +68,7 @@ inline float moving_average_get_sum_float(MovingAverage *maverage)
 	return *(float *)&maverage->Sum;
 }
 
-inline float moving_average_get_average_float(MovingAverage *maverage)
+float moving_average_get_average_float(MovingAverage *maverage)
 {
 	return *(float *)&maverage->Average;
 }
