@@ -28,7 +28,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern UART_HandleTypeDef huart3;
-extern const portTickType MAIN_FREQUENCY;
+extern const portTickType HYPERPERIOD;
 //For test purposes
 uint32_t gAnalysWDCheckback=0;
 
@@ -62,12 +62,13 @@ void StartAnalysTask(void const * argument)
   /* Thread */
   while(1){
     
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, GPIO_PIN_SET);
 
     
-    float val[23];
+    float val[24];
     uint8_t ctr = 0;
     
-    
+    val[ctr++] = 0;
     //Filter data
     val[ctr++] = filter_data->acc_x;
     val[ctr++] = filter_data->acc_y;
@@ -107,8 +108,8 @@ void StartAnalysTask(void const * argument)
     HAL_UART_Transmit(&huart3,(uint8_t*)&val, sizeof(float)*ctr, 4);
     huart3.State = HAL_UART_STATE_READY;
 
-    
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_15, GPIO_PIN_RESET);
     // Sleep thread until end of hyperperiod
-    vTaskDelayUntil(&last_task_start,MAIN_FREQUENCY); 
+    vTaskDelayUntil(&last_task_start,HYPERPERIOD); 
   } 
 }
