@@ -24,7 +24,7 @@ static float dt = 0.004;
 /* PID variables ----------------*/
 
 /* Gyroscope BIAS */
-const float GYRO_BIAS_Y = 125.0;
+const float GYRO_BIAS_Y = 121.217845;
 
 /* PID moving averages */
 static int RollMovingAverageSampleSize = 5;
@@ -36,9 +36,9 @@ static MovingAverage *PIDOutputPitchAverage;
 static MovingAverage *PIDOutputYawAverage;
 
 /* Roll */
-static float roll_kp = 3.5023;
-static float roll_ki = 0.0560548;
-static float roll_kd = 0.094465;
+static float roll_kp = 0.0891;
+static float roll_ki = 0.0402439;
+static float roll_kd = 0.131512;
 static float filtered_roll_angle;
 static float desired_roll_angle = 0;
 static float errorRoll = 0;
