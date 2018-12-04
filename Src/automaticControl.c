@@ -37,9 +37,9 @@ static float integralRoll = 0;
 static float PIDoutputRoll = 0;
 
 /* Pitch */
-static float pitch_kp = 0.0891           + 2.3;
-static float pitch_ki = 0.0402439        + 0.05;
-static float pitch_kd = 0.131512         - 0.05;
+static float pitch_kp = 0;
+static float pitch_ki = 0;
+static float pitch_kd = 0;
 static float desired_pitch_angle=0;
 static float filt_pitch_angle;
 static float errorPitch=0;
@@ -241,6 +241,8 @@ void PID_Pitch(FILTER_complement_struct *filter_pointer)
  ******************************************************************************/
 void PID_Roll(FILTER_complement_struct *filter_pointer)
 {
+  static float previousRollAngle = 0;
+  
   /* Roll control */ 
   if(desired_roll_angle > 25)
     desired_roll_angle = 25;
@@ -260,6 +262,9 @@ void PID_Roll(FILTER_complement_struct *filter_pointer)
       integralRoll = -50;
   
   derivateRoll = filter_pointer->gyr_y + GYRO_BIAS_Y; //D-term
+  //derivateRoll = (errorRoll - previousRollAngle) / dt;
+  //previousRollAngle = errorRoll;
+  
   PIDoutputRoll = roll_kp*errorRoll + roll_ki*integralRoll + roll_kd*derivateRoll; //control signal
 }
 
