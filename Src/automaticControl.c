@@ -18,17 +18,17 @@ extern TIM_HandleTypeDef htim2;
 
 /* Private variables ---------------------------------------------------------*/
 
-static float dt = 0.004;
+static float dt = 0.01;
 
 /* PID variables ----------------*/
 
-/* Gyroscope BIAS */
-const float GYRO_BIAS_Y = 121.217845;
-
 /* Roll */
-static float roll_kp = 0.0891           + 2.3;
-static float roll_ki = 0.0402439        + 0.05;
-static float roll_kd = 0.131512         - 0.05;
+static float WINDUP_ROLL_MAX = 50;
+static float previousErrorRoll = 0;
+
+static float roll_kp = 0.22;
+static float roll_ki = 0;
+static float roll_kd = 0;
 static float filtered_roll_angle;
 static float desired_roll_angle = 0;
 static float errorRoll = 0;
@@ -241,31 +241,24 @@ void PID_Pitch(FILTER_complement_struct *filter_pointer)
  ******************************************************************************/
 void PID_Roll(FILTER_complement_struct *filter_pointer)
 {
-  static float previousRollAngle = 0;
+  if (desired_roll_angle > 25)       desired_roll_angle = 25;
+  else if (desired_roll_angle < -25) desired_roll_angle = -25;
   
-  /* Roll control */ 
-  if(desired_roll_angle > 25)
-    desired_roll_angle = 25;
-  else if(desired_roll_angle < -25)
-    desired_roll_angle = -25;
+  errorRoll = desired_roll_angle - filtered_roll_angle;
   
-  errorRoll = desired_roll_angle - filtered_roll_angle; //Calculate error
+  derivateRoll      = errorRoll - previousErrorRoll;
+  previousErrorRoll = errorRoll;
   
-  //Windup control
-  if(abs((int)integralRoll) <= 50)
-      integralRoll += errorRoll*dt; //I-term
+  if (abs((int)integralRoll) <= WINDUP_ROLL_MAX) integralRoll += errorRoll*dt;
+  else if (integralRoll > 0)                     integralRoll = WINDUP_ROLL_MAX;
+  else                                           integralRoll = -WINDUP_ROLL_MAX;
   
-  else if (integralRoll > 0)
-      integralRoll = 50;
+  //derivateRoll = filter_pointer->gyr_y; //D-term
+  //derivateRoll = (previousErrorRoll - errorRoll) / dt;
+  //derivateRoll = errorRoll - previousErrorRoll;
+  //previousErrorRoll = errorRoll;
   
-  else
-      integralRoll = -50;
-  
-  derivateRoll = filter_pointer->gyr_y + GYRO_BIAS_Y; //D-term
-  //derivateRoll = (errorRoll - previousRollAngle) / dt;
-  //previousRollAngle = errorRoll;
-  
-  PIDoutputRoll = roll_kp*errorRoll + roll_ki*integralRoll + roll_kd*derivateRoll; //control signal
+  PIDoutputRoll = roll_kp*errorRoll + roll_ki*integralRoll + roll_kd*derivateRoll;
 }
 
 /** ****************************************************************************
