@@ -21,13 +21,13 @@ extern TIM_HandleTypeDef htim2;
 static float dt = 0.01;
 
 /* PID variables ----------------*/
+static float WINDUP_ROLL_MAX = 100;
+static float WINDUP_PITCH_MAX = 50;
 
 /* Roll */
-static float WINDUP_ROLL_MAX = 100;
-
-static float roll_kp = 0.0891           + 2.3;
-static float roll_ki = 0.0402439        + 0.05;
-static float roll_kd = 0.131512         - 0.05;
+static float roll_kp = 0;//0.0891           + 2.3;
+static float roll_ki = 0;//0.0402439        + 0.05;
+static float roll_kd = 0;//0.131512         - 0.05;
 static float filtered_roll_angle;
 static float desired_roll_angle = 0;
 static float errorRoll = 0;
@@ -36,9 +36,9 @@ static float integralRoll = 0;
 static float PIDoutputRoll = 0;
 
 /* Pitch */
-static float pitch_kp = 0;
-static float pitch_ki = 0;
-static float pitch_kd = 0;
+static float pitch_kp = 0.1023          + 0.1;
+static float pitch_ki = 0.0705517;
+static float pitch_kd = 0.09889;
 static float desired_pitch_angle=0;
 static float filt_pitch_angle;
 static float errorPitch=0;
@@ -206,29 +206,17 @@ void PID_Yaw(FILTER_complement_struct *filter_pointer)
  ******************************************************************************/
 void PID_Pitch(FILTER_complement_struct *filter_pointer)
 {
-  /* Pitch control */  
+  if(desired_pitch_angle > 25)       desired_pitch_angle = 25;
+  else if(desired_pitch_angle < -25) desired_pitch_angle = -25;
   
-  if(desired_pitch_angle > 25)
-    desired_pitch_angle = 25;
-  else if(desired_pitch_angle < -25)
-    desired_pitch_angle = -25;
+  errorPitch = desired_pitch_angle - filt_pitch_angle;
   
-  /* Pitch control */  
-  errorPitch = desired_pitch_angle - filt_pitch_angle; //error
+  if (abs((int)integralPitch) <= WINDUP_PITCH_MAX) integralPitch += errorPitch*dt;
+  else if (integralPitch > 0)                      integralPitch = WINDUP_PITCH_MAX;
+  else                                             integralPitch = -WINDUP_PITCH_MAX;
   
-  //Windup control
-  if(abs((int)integralPitch) <= 50){
-    integralPitch += errorPitch*dt; //I-term
-  }
-  else if (integralPitch > 0){
-    integralPitch = 50;
-  }
-  else {
-    integralPitch = -50;
-  }
-  
-  derivatePitch = filter_pointer->gyr_x; //D-term
-  PIDoutputPitch = pitch_kp*errorPitch + pitch_ki*integralPitch + pitch_kd*derivatePitch; //control signal
+  derivatePitch = filter_pointer->gyr_x - 20;
+  PIDoutputPitch = pitch_kp*errorPitch + pitch_ki*integralPitch + pitch_kd*derivatePitch;
 }
 
 /** ****************************************************************************
