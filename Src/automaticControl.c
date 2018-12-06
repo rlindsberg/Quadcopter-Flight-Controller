@@ -23,12 +23,11 @@ static float dt = 0.01;
 /* PID variables ----------------*/
 
 /* Roll */
-static float WINDUP_ROLL_MAX = 50;
-static float previousErrorRoll = 0;
+static float WINDUP_ROLL_MAX = 100;
 
-static float roll_kp = 0.22;
-static float roll_ki = 0;
-static float roll_kd = 0;
+static float roll_kp = 0.0891           + 2.3;
+static float roll_ki = 0.0402439        + 0.05;
+static float roll_kd = 0.131512         - 0.05;
 static float filtered_roll_angle;
 static float desired_roll_angle = 0;
 static float errorRoll = 0;
@@ -244,19 +243,12 @@ void PID_Roll(FILTER_complement_struct *filter_pointer)
   if (desired_roll_angle > 25)       desired_roll_angle = 25;
   else if (desired_roll_angle < -25) desired_roll_angle = -25;
   
-  errorRoll = desired_roll_angle - filtered_roll_angle;
-  
-  derivateRoll      = errorRoll - previousErrorRoll;
-  previousErrorRoll = errorRoll;
+  errorRoll    = desired_roll_angle - filtered_roll_angle;
+  derivateRoll = filter_pointer->gyr_y;
   
   if (abs((int)integralRoll) <= WINDUP_ROLL_MAX) integralRoll += errorRoll*dt;
   else if (integralRoll > 0)                     integralRoll = WINDUP_ROLL_MAX;
   else                                           integralRoll = -WINDUP_ROLL_MAX;
-  
-  //derivateRoll = filter_pointer->gyr_y; //D-term
-  //derivateRoll = (previousErrorRoll - errorRoll) / dt;
-  //derivateRoll = errorRoll - previousErrorRoll;
-  //previousErrorRoll = errorRoll;
   
   PIDoutputRoll = roll_kp*errorRoll + roll_ki*integralRoll + roll_kd*derivateRoll;
 }
