@@ -22,7 +22,7 @@ static float dt = 0.01;
 
 /* PID variables ----------------*/
 static float WINDUP_ROLL_MAX = 100;
-static float WINDUP_PITCH_MAX = 50;
+static float WINDUP_PITCH_MAX = 10;
 
 /* Roll */
 static float roll_kp = 0;//0.0891           + 2.3;
@@ -36,9 +36,9 @@ static float integralRoll = 0;
 static float PIDoutputRoll = 0;
 
 /* Pitch */
-static float pitch_kp = 0.1023          + 1.04;
-static float pitch_ki = 0.0705517       + 0.1;
-static float pitch_kd = 0.09889         - 0.05;
+static float pitch_kp = 0.1023          + 0.9;
+static float pitch_ki = 0.0705517       + 0.5;
+static float pitch_kd = 0.09889*14      - 0.8;
 static float desired_pitch_angle=0;
 static float filt_pitch_angle;
 static float errorPitch=0;
@@ -210,7 +210,7 @@ void PID_Pitch(FILTER_complement_struct *filter_pointer)
   else if (desired_pitch_angle < -25) desired_pitch_angle = -25;
   
   errorPitch = desired_pitch_angle - filt_pitch_angle;
-  derivatePitch = filter_pointer->gyr_x - 8;
+  derivatePitch = 0 - filter_pointer->pitch_angle_speed;
   
   if (abs((int)integralPitch) <= WINDUP_PITCH_MAX) integralPitch += errorPitch*dt;
   else if (integralPitch > 0)                      integralPitch = WINDUP_PITCH_MAX;

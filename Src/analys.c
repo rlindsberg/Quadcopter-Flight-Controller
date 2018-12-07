@@ -77,8 +77,10 @@ void StartAnalysTask(void const * argument)
     //val[ctr++] = filter_data->acc_x;
     //val[ctr++] = filter_data->acc_y;
     //val[ctr++] = filter_data->acc_z;
+    //val[ctr++] = filter_data->gyr_x;
+    val[ctr++] = filter_data->pitch_angle_speed;
     val[ctr++] = filter_data->gyr_x;
-    val[ctr++] = filter_data->gyr_y;
+    //val[ctr++] = filter_data->gyr_y;
     val[ctr++] = filter_data->gyr_z;
     //val[ctr++] = filter_data->acc_pitch;
     //val[ctr++] = filter_data->acc_roll;
