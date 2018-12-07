@@ -36,9 +36,9 @@ static float integralRoll = 0;
 static float PIDoutputRoll = 0;
 
 /* Pitch */
-static float pitch_kp = 0.1023          + 0.1;
-static float pitch_ki = 0.0705517;
-static float pitch_kd = 0.09889;
+static float pitch_kp = 0.1023          + 1.04;
+static float pitch_ki = 0.0705517       + 0.1;
+static float pitch_kd = 0.09889         - 0.05;
 static float desired_pitch_angle=0;
 static float filt_pitch_angle;
 static float errorPitch=0;
@@ -99,7 +99,7 @@ void automaticControl(main_struct* all_values)
   
   /* Setpoint for Yaw, Pitch and Roll */
   desired_yaw_angle = pwm_pointer->yaw;
-  desired_pitch_angle = pwm_pointer->pitch - 2; // -2 due to error from controller
+  desired_pitch_angle = pwm_pointer->pitch;
   desired_roll_angle = pwm_pointer->roll;
 
   
@@ -206,16 +206,16 @@ void PID_Yaw(FILTER_complement_struct *filter_pointer)
  ******************************************************************************/
 void PID_Pitch(FILTER_complement_struct *filter_pointer)
 {
-  if(desired_pitch_angle > 25)       desired_pitch_angle = 25;
-  else if(desired_pitch_angle < -25) desired_pitch_angle = -25;
+  if (desired_pitch_angle > 25)       desired_pitch_angle = 25;
+  else if (desired_pitch_angle < -25) desired_pitch_angle = -25;
   
   errorPitch = desired_pitch_angle - filt_pitch_angle;
+  derivatePitch = filter_pointer->gyr_x - 8;
   
   if (abs((int)integralPitch) <= WINDUP_PITCH_MAX) integralPitch += errorPitch*dt;
   else if (integralPitch > 0)                      integralPitch = WINDUP_PITCH_MAX;
   else                                             integralPitch = -WINDUP_PITCH_MAX;
   
-  derivatePitch = filter_pointer->gyr_x - 20;
   PIDoutputPitch = pitch_kp*errorPitch + pitch_ki*integralPitch + pitch_kd*derivatePitch;
 }
 
