@@ -97,14 +97,12 @@ void automaticControl(main_struct* all_values)
   filt_pitch_angle = filter_pointer->filter_pitch;
   filtered_roll_angle = filter_pointer->filter_roll;
   
-  /* Setpoint for Yaw, Pitch and Roll */
+  // Setpoint for Yaw, Pitch and Roll
+  // Angle is from -63 degrees to +62 degrees
+  
   desired_yaw_angle = pwm_pointer->yaw;
   desired_pitch_angle = pwm_pointer->pitch;
   desired_roll_angle = pwm_pointer->roll;
-
-  
-
-  
 
   /*Run PID algoritm for Yaw, Pitch and Roll*/
   PID_Yaw(filter_pointer);
@@ -112,6 +110,7 @@ void automaticControl(main_struct* all_values)
   PID_Roll(filter_pointer);
   
   /* Motor control */
+  // Thrust is between 1000-2000
   ThrustOnMotor = pwm_pointer->thrust;
   EmergencyValue = pwm_pointer->emergency;
   motorControl();
